@@ -1,4 +1,4 @@
-# Static site: no build step, serve the repo root.
+# Static site: no build step. Everything Netlify serves lives in public/.
 [build]
-  publish = "."
+  publish = "public"
   command = ""

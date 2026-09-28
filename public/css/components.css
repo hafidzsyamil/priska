@@ -1,0 +1,237 @@
+/* Shared components used across pages. Requires tokens.css and base.css. */
+
+/* Header */
+
+.site-header {
+  border-bottom: var(--line-thick);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 2rem;
+  padding-block: 0.75rem;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  text-decoration: none;
+}
+
+.wordmark em {
+  font-weight: 400;
+  margin-left: 0.2em;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.4em;
+}
+
+/* Footer */
+
+.site-footer {
+  padding-block: 3rem;
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+/* Section heading: label in the left rail, title across the rest of the grid. */
+
+.section-head {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: clamp(2.5rem, 6vw, var(--text-5xl));
+  line-height: 1.05;
+}
+
+.section-head__intro {
+  max-width: 40rem;
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+  .section-head {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem var(--gap);
+    margin-bottom: 4rem;
+  }
+
+  .section-head > .label {
+    grid-column: 1 / span 3;
+    padding-top: 0.9rem;
+  }
+
+  .section-head > :not(.label) {
+    grid-column: 4 / -1;
+  }
+}
+
+/* Oversized statement heading */
+
+.display-title {
+  font-size: clamp(3rem, 10vw, var(--text-8xl));
+  line-height: 0.95;
+  letter-spacing: var(--tracking-tighter);
+}
+
+/* Links */
+
+.link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.link:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Buttons: colour inversion on hover, no easing. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 1rem 2rem;
+  border: 2px solid var(--color-fg);
+  background: var(--color-fg);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: none;
+}
+
+.btn:hover {
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+.btn:focus-visible {
+  outline-offset: 3px;
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--color-fg);
+}
+
+.btn--outline:hover {
+  background: var(--color-fg);
+  color: var(--color-bg);
+}
+
+.inverted .btn {
+  border-color: var(--color-bg);
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+.inverted .btn:hover {
+  background: var(--color-fg);
+  color: var(--color-bg);
+}
+
+/* Text input: bottom rule that thickens on focus instead of a focus ring. */
+
+.field {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.75rem 0 calc(0.75rem + 2px);
+  border: 0;
+  border-bottom: 2px solid var(--color-fg);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-2xl);
+  line-height: 1.3;
+}
+
+.field::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  opacity: 1;
+}
+
+.field:focus {
+  outline: none;
+  border-bottom-width: 4px;
+  padding-bottom: 0.75rem;
+}
+
+/* Cards */
+
+.card {
+  display: block;
+  padding: 2rem;
+  border: var(--line-thin);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  text-decoration: none;
+}
+
+.card--interactive {
+  transition:
+    background-color var(--duration-fast) linear,
+    color var(--duration-fast) linear;
+}
+
+.card--interactive:hover,
+.card--interactive:focus-visible {
+  --text-muted: var(--color-muted-fg-inverse);
+  background: var(--color-fg);
+  color: var(--color-bg);
+}
+
+/* Closing call to action (inverted) */
+
+.cta__title {
+  margin-bottom: 3rem;
+}

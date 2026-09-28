@@ -1,9 +1,13 @@
-# priska
+# Cek Kredibilitas Artikel
 
-A minimal hello-world static site for testing the Claude Code → GitHub → Netlify pipeline.
+Paste a news article link and get a 0–100 credibility indicator, with reasons and evidence you can check yourself. Currently a frontend with demo data; the analysis backend is not built yet.
 
-- `index.html` — the page
-- `css/` — stylesheets
-- `netlify.toml` — tells Netlify to publish the repo root with no build step
+- `public/` — everything Netlify serves
+  - `index.html` — home page and link form
+  - `hasil.html` + `js/hasil.js` — results page, rendered from JSON
+  - `css/` — `tokens.css` (design tokens), `base.css`, `components.css`, and one file per page
+  - `data/contoh/` — fictional demo results
+- `docs/` — product brief and design system
+- `netlify.toml` — publishes `public/` with no build step
 
-To check that a new deploy went live, bump the `Version` string in `index.html`, push, and reload the Netlify URL.
+Run locally: `python3 -m http.server -d public 8000`, then open http://localhost:8000.

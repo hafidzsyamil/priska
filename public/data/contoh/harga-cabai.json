@@ -1,0 +1,96 @@
+{
+  "demo": true,
+  "artikel": {
+    "url": "https://pasarhariini.example/ekonomi/harga-cabai-sukamaju-naik-40-persen",
+    "domain": "pasarhariini.example",
+    "sumber": "Pasar Hari Ini",
+    "judul": "Harga Cabai Rawit di Sukamaju Melonjak 40 Persen, Pedagang Salahkan Cuaca",
+    "penulis": "Tim Redaksi",
+    "tanggal": "2026-09-24"
+  },
+  "durasi_detik": 22.1,
+  "ringkasan": "Sebagian klaim didukung media lain, tetapi angka utamanya dibantah data resmi dan sumber angkanya tidak disebut.",
+  "komponen": [
+    {
+      "nama": "Dukungan sumber lain",
+      "nilai": 17,
+      "maks": 35,
+      "alasan": "Klaim soal cuaca didukung. Angka kenaikan 40 persen didukung 1 artikel tetapi dibantah 1 artikel yang mengutip data Dinas Perdagangan. Rencana operasi pasar tidak ditemukan di media lain."
+    },
+    {
+      "nama": "Fact-check yang ada",
+      "nilai": 15,
+      "maks": 25,
+      "alasan": "Belum ada fact-check untuk ketiga klaim utama, jadi komponen ini diberi nilai netral."
+    },
+    {
+      "nama": "Porsi klaim faktual",
+      "nilai": 8,
+      "maks": 15,
+      "alasan": "7 dari 12 kalimat berisi klaim yang bisa diperiksa. 5 kalimat lain berupa opini, dugaan, dan perkiraan."
+    },
+    {
+      "nama": "Transparansi sumber",
+      "nilai": 12,
+      "maks": 25,
+      "alasan": "Tanggal terbit tercantum, tetapi penulis hanya ditulis \"Tim Redaksi\" dan angka 40 persen tidak menyebut sumber datanya."
+    }
+  ],
+  "klaim_utama": [
+    {
+      "teks": "Harga cabai rawit di Pasar Induk Sukamaju naik 40 persen dalam dua minggu.",
+      "factcheck": null
+    },
+    {
+      "teks": "Kenaikan harga dipicu curah hujan tinggi yang merusak panen di sentra produksi.",
+      "factcheck": null
+    },
+    {
+      "teks": "Pemkot Sukamaju akan menggelar operasi pasar mulai pekan depan.",
+      "factcheck": null
+    }
+  ],
+  "pembanding": [
+    {
+      "klaim": 1,
+      "sikap": "membantah",
+      "judul": "Harga Cabai Rawit Naik 25 Persen, Dinas Perdagangan Pantau Stok",
+      "sumber": "Sukamaju Pos",
+      "url": "https://sukamajupos.example/ekonomi/2026/09/23/harga-cabai-rawit-naik-25-persen",
+      "tanggal": "2026-09-23",
+      "catatan": "Mengutip data Dinas Perdagangan: kenaikan 25 persen, bukan 40 persen."
+    },
+    {
+      "klaim": 1,
+      "sikap": "mendukung",
+      "judul": "Cabai Rawit Tembus Rp78 Ribu per Kilogram di Pasar Induk",
+      "sumber": "Radar Timur",
+      "url": "https://radartimur.example/ekonomi/cabai-rawit-tembus-78-ribu",
+      "tanggal": "2026-09-24",
+      "catatan": "Harga per kilogram yang dilaporkan setara kenaikan sekitar 40 persen, tanpa menyebut sumber data."
+    },
+    {
+      "klaim": 2,
+      "sikap": "mendukung",
+      "judul": "Petani Cabai di Lereng Selatan Gagal Panen Akibat Hujan",
+      "sumber": "Suara Sukamaju",
+      "url": "https://suarasukamaju.example/2026/09/19/petani-cabai-gagal-panen",
+      "tanggal": "2026-09-19",
+      "catatan": "Mengonfirmasi kerusakan panen akibat hujan di sentra produksi."
+    }
+  ],
+  "kalimat": [
+    { "jenis": "klaim", "teks": "Harga cabai rawit di Pasar Induk Sukamaju naik 40 persen dalam dua minggu terakhir." },
+    { "jenis": "klaim", "teks": "Pada awal September harga cabai rawit masih Rp56.000 per kilogram, kini mencapai Rp78.000." },
+    { "jenis": "opini", "teks": "Kenaikan ini jelas sangat memberatkan ibu rumah tangga." },
+    { "jenis": "klaim", "teks": "Sejumlah pedagang menyebut pasokan dari sentra produksi di lereng selatan berkurang hampir separuh." },
+    { "jenis": "klaim", "teks": "Curah hujan tinggi sepanjang September merusak tanaman cabai di sentra produksi tersebut." },
+    { "jenis": "opini", "teks": "Pemerintah seharusnya sudah mengantisipasi hal ini sejak jauh hari." },
+    { "jenis": "opini", "teks": "Banyak pihak menduga ada permainan tengkulak di balik lonjakan harga." },
+    { "jenis": "klaim", "teks": "Harga cabai merah keriting relatif stabil di kisaran Rp42.000 per kilogram." },
+    { "jenis": "klaim", "teks": "Pemkot Sukamaju akan menggelar operasi pasar mulai pekan depan." },
+    { "jenis": "opini", "teks": "Operasi pasar biasanya tidak banyak membantu." },
+    { "jenis": "klaim", "teks": "Operasi pasar direncanakan berlangsung di lima kecamatan." },
+    { "jenis": "opini", "teks": "Situasi ini diperkirakan akan terus memburuk hingga akhir tahun." }
+  ]
+}

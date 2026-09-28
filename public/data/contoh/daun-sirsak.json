@@ -1,0 +1,117 @@
+{
+  "demo": true,
+  "artikel": {
+    "url": "https://infosehatkita.example/rebusan-daun-sirsak-sembuhkan-diabetes-7-hari",
+    "domain": "infosehatkita.example",
+    "sumber": "Info Sehat Kita",
+    "judul": "Cukup Minum Rebusan Daun Sirsak Tiap Pagi, Diabetes Sembuh Total dalam 7 Hari",
+    "penulis": null,
+    "tanggal": null
+  },
+  "durasi_detik": 26.3,
+  "ringkasan": "Dua klaim utamanya sudah dinilai salah dan menyesatkan oleh pemeriksa fakta, dan artikel tidak menyebut sumber yang bisa dicek.",
+  "komponen": [
+    {
+      "nama": "Dukungan sumber lain",
+      "nilai": 4,
+      "maks": 35,
+      "alasan": "Dari 4 artikel pembanding, 2 membantah dan 1 netral. Satu-satunya yang mendukung hanya berisi testimoni tanpa data medis."
+    },
+    {
+      "nama": "Fact-check yang ada",
+      "nilai": 2,
+      "maks": 25,
+      "alasan": "Dua klaim utama sudah diperiksa pemeriksa fakta dan dinilai Salah serta Menyesatkan."
+    },
+    {
+      "nama": "Porsi klaim faktual",
+      "nilai": 5,
+      "maks": 15,
+      "alasan": "Hanya 5 dari 12 kalimat berupa klaim yang bisa diperiksa. Sisanya ajakan, testimoni, dan opini."
+    },
+    {
+      "nama": "Transparansi sumber",
+      "nilai": 3,
+      "maks": 25,
+      "alasan": "Tidak ada nama penulis maupun tanggal terbit. Penelitian yang dirujuk tidak disebut judul, peneliti, atau jurnalnya."
+    }
+  ],
+  "klaim_utama": [
+    {
+      "teks": "Rebusan daun sirsak menyembuhkan diabetes secara total dalam 7 hari.",
+      "factcheck": {
+        "penerbit": "Cek Fakta Contoh",
+        "judul": "Rebusan daun sirsak tidak terbukti menyembuhkan diabetes dalam 7 hari",
+        "rating": "Salah",
+        "tanggal": "2025-11-03",
+        "url": "https://cekfakta.example/2025/11/daun-sirsak-diabetes-7-hari"
+      }
+    },
+    {
+      "teks": "Penelitian sebuah universitas di Jepang membuktikan daun sirsak lebih ampuh daripada insulin.",
+      "factcheck": {
+        "penerbit": "Cek Fakta Contoh",
+        "judul": "Tidak ditemukan penelitian yang menyebut daun sirsak lebih ampuh daripada insulin",
+        "rating": "Menyesatkan",
+        "tanggal": "2026-02-17",
+        "url": "https://cekfakta.example/2026/02/daun-sirsak-insulin"
+      }
+    },
+    {
+      "teks": "Pasien diabetes boleh menghentikan obat dari dokter setelah rutin minum rebusan ini.",
+      "factcheck": null
+    }
+  ],
+  "pembanding": [
+    {
+      "klaim": 1,
+      "sikap": "membantah",
+      "judul": "Menelusuri Klaim Daun Sirsak untuk Diabetes",
+      "sumber": "Sukamaju Pos",
+      "url": "https://sukamajupos.example/kesehatan/2026/01/12/menelusuri-klaim-daun-sirsak",
+      "tanggal": "2026-01-12",
+      "catatan": "Belum ada uji klinis pada manusia yang menunjukkan diabetes bisa sembuh dengan daun sirsak."
+    },
+    {
+      "klaim": 1,
+      "sikap": "mendukung",
+      "judul": "Viral Resep Daun Sirsak, Warganet Berbagi Pengalaman",
+      "sumber": "Portal Warga",
+      "url": "https://portalwarga.example/viral/resep-daun-sirsak",
+      "tanggal": "2026-09-10",
+      "catatan": "Hanya berisi testimoni warganet, tanpa data medis."
+    },
+    {
+      "klaim": 2,
+      "sikap": "netral",
+      "judul": "Daun Sirsak dalam Penelitian: Apa yang Sudah Diketahui",
+      "sumber": "Jurnal Populer",
+      "url": "https://jurnalpopuler.example/sains/daun-sirsak-dalam-penelitian",
+      "tanggal": "2025-08-05",
+      "catatan": "Penelitian yang ada baru sebatas uji laboratorium dan hewan, dan tidak membandingkan dengan insulin."
+    },
+    {
+      "klaim": 3,
+      "sikap": "membantah",
+      "judul": "Dokter: Jangan Hentikan Obat Diabetes demi Ramuan Herbal",
+      "sumber": "Kesehatan Harian",
+      "url": "https://kesehatanharian.example/2025/10/28/jangan-hentikan-obat-diabetes",
+      "tanggal": "2025-10-28",
+      "catatan": "Mengutip dokter spesialis penyakit dalam: menghentikan obat tanpa arahan dokter berisiko komplikasi."
+    }
+  ],
+  "kalimat": [
+    { "jenis": "klaim", "teks": "Rebusan daun sirsak dapat menyembuhkan diabetes secara total hanya dalam 7 hari." },
+    { "jenis": "opini", "teks": "Ini adalah rahasia yang tidak ingin diketahui perusahaan farmasi." },
+    { "jenis": "klaim", "teks": "Sebuah penelitian universitas di Jepang membuktikan daun sirsak lebih ampuh daripada insulin." },
+    { "jenis": "opini", "teks": "Sudah banyak orang yang merasakan sendiri khasiatnya." },
+    { "jenis": "klaim", "teks": "Cukup rebus 10 lembar daun sirsak dengan tiga gelas air hingga tersisa satu gelas." },
+    { "jenis": "klaim", "teks": "Minum rebusan tersebut setiap pagi sebelum sarapan." },
+    { "jenis": "opini", "teks": "Rasanya memang pahit, tetapi hasilnya luar biasa." },
+    { "jenis": "klaim", "teks": "Setelah rutin minum rebusan ini, pasien diabetes boleh menghentikan obat dari dokter." },
+    { "jenis": "opini", "teks": "Jangan sampai terlambat seperti banyak orang lainnya." },
+    { "jenis": "opini", "teks": "Alam sudah menyediakan obat untuk segala penyakit." },
+    { "jenis": "opini", "teks": "Bagikan informasi ini kepada keluarga dan teman yang Anda sayangi." },
+    { "jenis": "opini", "teks": "Dijamin Anda tidak akan menyesal mencobanya." }
+  ]
+}

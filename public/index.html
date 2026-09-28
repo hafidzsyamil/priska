@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cek Kredibilitas Artikel</title>
+  <meta name="description" content="Tempel link artikel berita dan dapatkan skor kredibilitas 0–100 beserta alasan dan bukti yang bisa dicek sendiri.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+  <a class="skip-link" href="#konten">Langsung ke konten</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="wordmark" href="/">Cek<em>Kredibilitas</em></a>
+      <nav aria-label="Utama">
+        <ul class="site-nav">
+          <li><a href="/#cara-kerja">Cara kerja</a></li>
+          <li><a href="/#metode">Metode skor</a></li>
+          <li><a href="/#contoh">Contoh hasil</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="konten">
+    <section class="hero" aria-labelledby="hero-judul">
+      <div class="container">
+        <p class="label hero__kicker">Indikator kredibilitas artikel berita</p>
+        <h1 id="hero-judul" class="hero__title">
+          <span class="hero__title-main">Cek dulu,</span>
+          <em class="hero__title-sub">baru percaya.</em>
+        </h1>
+        <div class="ornament" aria-hidden="true"></div>
+        <div class="hero__body">
+          <p class="lead hero__lead">Tempel link artikel berita. Klaim faktual dipisahkan dari opini, dicocokkan dengan hasil fact-check dan artikel lain yang membahas klaim yang sama, lalu diberi skor 0–100 lengkap dengan alasan dan bukti yang bisa kamu cek sendiri.</p>
+          <form id="periksa" class="check-form" action="/hasil.html" method="get">
+            <label class="label" for="url-artikel">Link artikel</label>
+            <input class="field" id="url-artikel" name="url" type="url" inputmode="url" placeholder="https://…" required>
+            <button class="btn" type="submit">Periksa artikel <span aria-hidden="true">→</span></button>
+            <p class="check-form__hint">Versi demo: mesin analisis belum aktif. Lihat <a class="link" href="#contoh">contoh hasil</a> untuk melihat tampilannya.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <hr class="rule">
+
+    <section id="cara-kerja" class="section texture-diagonal" aria-labelledby="cara-kerja-judul">
+      <div class="container">
+        <header class="section-head">
+          <p class="label">01 — Cara kerja</p>
+          <h2 id="cara-kerja-judul" class="section-title">Empat langkah, <em>satu skor.</em></h2>
+        </header>
+        <ol class="steps">
+          <li class="card card--interactive step">
+            <span class="step__num">01</span>
+            <h3 class="step__title">Ekstraksi</h3>
+            <p>Judul, penulis, tanggal terbit, dan isi diambil dari link yang kamu tempel.</p>
+          </li>
+          <li class="card card--interactive step">
+            <span class="step__num">02</span>
+            <h3 class="step__title">Pemisahan</h3>
+            <p>Setiap kalimat diberi label klaim faktual atau opini. Tiga klaim utama dipilih untuk diperiksa.</p>
+          </li>
+          <li class="card card--interactive step">
+            <span class="step__num">03</span>
+            <h3 class="step__title">Pencocokan</h3>
+            <p>Klaim dicocokkan dengan hasil fact-check yang sudah terbit dan 3–5 artikel lain yang membahasnya.</p>
+          </li>
+          <li class="card card--interactive step">
+            <span class="step__num">04</span>
+            <h3 class="step__title">Penilaian</h3>
+            <p>Skor 0–100 dihitung dari empat komponen. Setiap komponen punya alasan dan link bukti.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section inverted texture-vertical" aria-label="Angka kunci">
+      <div class="container">
+        <dl class="stats__grid">
+          <div class="stat">
+            <dt class="label">Target waktu dari link ke skor</dt>
+            <dd>&lt;30<span class="stat__unit">detik</span></dd>
+          </div>
+          <div class="stat">
+            <dt class="label">Klaim utama diperiksa</dt>
+            <dd>3</dd>
+          </div>
+          <div class="stat">
+            <dt class="label">Artikel pembanding</dt>
+            <dd>3–5</dd>
+          </div>
+          <div class="stat">
+            <dt class="label">Skor, selalu dengan alasan</dt>
+            <dd>0–100</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Prinsip">
+      <div class="container">
+        <figure class="pull-quote">
+          <blockquote>
+            <p>Indikator kredibilitas, bukan vonis benar atau salah.</p>
+          </blockquote>
+          <figcaption class="label">Prinsip dasar · Setiap angka disertai alasan dan link bukti</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <hr class="rule">
+
+    <section id="metode" class="section texture-grid" aria-labelledby="metode-judul">
+      <div class="container">
+        <header class="section-head">
+          <p class="label">02 — Metode skor</p>
+          <h2 id="metode-judul" class="section-title">Dari mana <em>angkanya</em> datang.</h2>
+        </header>
+        <div class="method">
+          <div class="method__prose">
+            <p class="lead dropcap">Skor dihitung dari empat komponen dengan bobot tetap. Setiap komponen punya nilai maksimal dan alasan tertulis, jadi kamu bisa melihat bagian mana yang menaikkan atau menurunkan skor.</p>
+            <p>Skor tidak bergantung pada nama besar media. Artikel dari media mana pun dinilai dengan cara yang sama: apakah klaimnya didukung sumber lain, apakah sudah pernah diperiksa pemeriksa fakta, seberapa banyak isinya berupa fakta, dan seberapa jelas sumbernya disebut.</p>
+            <p class="muted">Jika belum ada fact-check untuk sebuah klaim, komponen fact-check diberi nilai netral 15 dari 25, bukan nol.</p>
+          </div>
+          <div class="method__detail">
+            <ol class="weights">
+              <li class="weight">
+                <h3 class="weight__name">Dukungan sumber lain</h3>
+                <p class="weight__value">35</p>
+                <p class="weight__desc">Berapa banyak artikel dari media lain yang mendukung, membantah, atau netral terhadap tiga klaim utama.</p>
+              </li>
+              <li class="weight">
+                <h3 class="weight__name">Fact-check yang ada</h3>
+                <p class="weight__value">25</p>
+                <p class="weight__desc">Hasil pemeriksaan fakta yang sudah terbit untuk klaim yang sama.</p>
+              </li>
+              <li class="weight">
+                <h3 class="weight__name">Porsi klaim faktual</h3>
+                <p class="weight__value">15</p>
+                <p class="weight__desc">Perbandingan kalimat berisi klaim yang bisa diperiksa dengan kalimat opini.</p>
+              </li>
+              <li class="weight">
+                <h3 class="weight__name">Transparansi sumber</h3>
+                <p class="weight__value">25</p>
+                <p class="weight__desc">Nama penulis, tanggal terbit, serta narasumber atau data yang disebut dengan jelas.</p>
+              </li>
+              <li class="weight weight--total">
+                <p class="weight__name">Total</p>
+                <p class="weight__value">100</p>
+              </li>
+            </ol>
+            <ol class="bands" aria-label="Rentang skor">
+              <li class="band band--rendah"><span class="label">0–39</span><span class="band__name">Rendah</span></li>
+              <li class="band band--sedang"><span class="label">40–69</span><span class="band__name">Sedang</span></li>
+              <li class="band band--tinggi"><span class="label">70–100</span><span class="band__name">Tinggi</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="rule">
+
+    <section id="contoh" class="section" aria-labelledby="contoh-judul">
+      <div class="container">
+        <header class="section-head">
+          <p class="label">03 — Contoh hasil</p>
+          <h2 id="contoh-judul" class="section-title">Tiga artikel, <em>tiga skor.</em></h2>
+          <p class="section-head__intro">Artikel, media, dan hasil di bawah ini fiktif, dibuat untuk memperlihatkan tampilan hasil analisis.</p>
+        </header>
+        <ul class="examples">
+          <li>
+            <a class="card card--interactive example" href="/hasil.html?contoh=halte-listrik">
+              <span class="example__score">81</span>
+              <span class="label">Indikator tinggi</span>
+              <span class="example__title">Pemkot Sukamaju Resmikan 12 Halte Bus Listrik di Koridor Timur</span>
+              <span class="label example__source">kabarsukamaju.example</span>
+              <span class="label example__cta">Lihat hasil <span aria-hidden="true">→</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="card card--interactive example" href="/hasil.html?contoh=harga-cabai">
+              <span class="example__score">52</span>
+              <span class="label">Indikator sedang</span>
+              <span class="example__title">Harga Cabai Rawit di Sukamaju Melonjak 40 Persen, Pedagang Salahkan Cuaca</span>
+              <span class="label example__source">pasarhariini.example</span>
+              <span class="label example__cta">Lihat hasil <span aria-hidden="true">→</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="card card--interactive example" href="/hasil.html?contoh=daun-sirsak">
+              <span class="example__score">14</span>
+              <span class="label">Indikator rendah</span>
+              <span class="example__title">Cukup Minum Rebusan Daun Sirsak Tiap Pagi, Diabetes Sembuh Total dalam 7 Hari</span>
+              <span class="label example__source">infosehatkita.example</span>
+              <span class="label example__cta">Lihat hasil <span aria-hidden="true">→</span></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section inverted texture-radial" aria-labelledby="cta-judul">
+      <div class="container">
+        <h2 id="cta-judul" class="display-title cta__title">Tempel link.<br><em>Baca buktinya.</em></h2>
+        <a class="btn" href="#periksa">Periksa artikel <span aria-hidden="true">↑</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="wordmark">Cek<em>Kredibilitas</em></p>
+      <p class="label">Proyek akhir · 2026</p>
+      <p class="label">Indikator, bukan vonis.</p>
+    </div>
+  </footer>
+</body>
+</html>
