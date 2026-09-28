@@ -31,6 +31,8 @@ const MARKDOWN = [
 
 let calls;
 let gemini429;
+let geminiDown;
+let geminiModels;
 
 function jsonResponse(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
@@ -55,6 +57,9 @@ async function fakeFetch(input, init = {}) {
   if (url.hostname === 'generativelanguage.googleapis.com') {
     assert.equal(init.headers['x-goog-api-key'], 'kunci-gemini');
     if (gemini429) return jsonResponse({ error: { code: 429 } }, 429);
+    const model = url.pathname.split('/models/')[1].split(':')[0];
+    geminiModels.push(model);
+    if (geminiDown.has(model)) return jsonResponse({ error: { code: 503, message: 'The model is overloaded.' } }, 503);
     const body = JSON.parse(init.body);
     assert.equal(body.generationConfig.responseMimeType, 'application/json');
     const prompt = body.contents[0].parts[0].text;
@@ -136,6 +141,8 @@ const originalFetch = globalThis.fetch;
 beforeEach(() => {
   calls = [];
   gemini429 = false;
+  geminiDown = new Set();
+  geminiModels = [];
   globalThis.fetch = fakeFetch;
   Object.assign(process.env, { GEMINI_API_KEY: 'kunci-gemini', FACTCHECK_API_KEY: 'kunci-factcheck', TAVILY_API_KEY: 'kunci-tavily' });
   delete process.env.JINA_API_KEY;
@@ -212,6 +219,41 @@ test('an invalid link is rejected before any API call', async () => {
   assert.equal(response.status, 400);
   assert.equal((await response.json()).galat, 'link_tidak_valid');
   assert.deepEqual(calls, []);
+});
+
+test('an overloaded Gemini model falls back to the next one', async () => {
+  geminiDown = new Set(['gemini-3.1-flash-lite']);
+  const response = await handler(request(ARTICLE_URL));
+  assert.equal(response.status, 200);
+  assert.deepEqual(geminiModels, ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-3.5-flash-lite']);
+});
+
+test('GEMINI_MODEL is tried first, with the defaults as fallback', async () => {
+  process.env.GEMINI_MODEL = 'gemini-3.8-flash';
+  geminiDown = new Set(['gemini-3.8-flash']);
+  const response = await handler(request(ARTICLE_URL));
+  assert.equal(response.status, 200);
+  assert.deepEqual(geminiModels.slice(0, 2), ['gemini-3.8-flash', 'gemini-3.1-flash-lite']);
+});
+
+test('models that stay overloaded are retried in rounds, then reported as busy', async () => {
+  geminiDown = new Set(['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite']);
+  const response = await handler(request(ARTICLE_URL));
+  assert.equal(response.status, 502);
+  assert.equal((await response.json()).galat, 'ai_sibuk');
+  assert.equal(geminiModels.length, 8, 'eight attempts across both models');
+});
+
+test('an overload that clears is absorbed by the retry', async () => {
+  geminiDown = new Set(['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite']);
+  let calls = 0;
+  const original = globalThis.fetch;
+  globalThis.fetch = async (input, init) => {
+    if (new URL(String(input)).hostname === 'generativelanguage.googleapis.com' && ++calls === 3) geminiDown.clear();
+    return original(input, init);
+  };
+  const response = await handler(request(ARTICLE_URL));
+  assert.equal(response.status, 200);
 });
 
 test('an exhausted Gemini quota is reported as such', async () => {

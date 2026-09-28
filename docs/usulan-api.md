@@ -36,7 +36,7 @@ Pilihan layanan untuk backend analisis Cek Kredibilitas Artikel, dengan target b
 | Langkah | Layanan | Kuota gratis | Pemakaian per analisis | Cadangan |
 |---|---|---|---|---|
 | Ekstraksi artikel | Jina Reader (`https://r.jina.ai/<url>`) | Tanpa key ±20 request/menit; key gratis 10 juta token | 1 request | Parse JSON-LD dan meta tag dari HTML sendiri |
-| Klaim/opini, sikap | Gemini API, model 3.5 Flash-Lite | Gratis, ±500 request/hari (angka pihak ketiga; cek di AI Studio) | 2 request | Groq (paket gratis) |
+| Klaim/opini, sikap | Gemini API, model 3.1 Flash-Lite (cadangan 3.5 Flash-Lite) | Gratis, ±500 request/hari (angka pihak ketiga; cek di AI Studio) | 2 request | Groq (paket gratis) |
 | Fact-check | Google Fact Check Tools API | Gratis dengan API key | 3 request | Tavily dibatasi ke situs cek fakta Indonesia |
 | Artikel pembanding | Tavily Search (basic) | 1.000 kredit/bulan, tanpa kartu kredit | 3 kredit | Google News RSS |
 | Cache | CDN Netlify | Termasuk | — | — |
@@ -98,7 +98,8 @@ Deploy adalah pemakaian terbesar. `netlify.toml` punya aturan `ignore` supaya co
 | Validasi link (hanya http/https publik) | `netlify/lib/url.mjs` |
 | Tes (API diganti stub) | `tests/*.test.mjs`, jalankan `node --test tests/*.test.mjs` |
 
-- **Model:** `gemini-3.5-flash-lite`, bisa diganti lewat environment variable `GEMINI_MODEL`.
+- **Model:** `gemini-3.1-flash-lite`, cadangan `gemini-3.5-flash-lite`. Model di environment variable `GEMINI_MODEL` (opsional) dicoba paling dulu.
+- **Gemini sibuk:** paket gratis sering membalas 503 ("high demand"). Saat diuji 28 September 2026, hanya 1 dari 12 panggilan langsung berhasil. Backend mencoba ulang hingga 8 kali bergantian antarmodel dengan jeda singkat. Model yang membalas 404 atau 429 tidak dicoba lagi. Jika semua gagal, pengguna melihat pesan "Layanan AI sedang sibuk".
 - **Batas waktu:** seluruh analisis dibatasi 55 detik. Jika habis, pengguna mendapat pesan "Waktu habis".
 - **Batas request:** 6 request per menit per IP untuk `/api/analisis` (aturan rate limit Netlify di `config` function).
 - **Layanan yang gagal:** analisis tetap jalan. Komponen yang terdampak diberi nilai netral, dan hasilnya memuat catatan yang menjelaskan hal itu.

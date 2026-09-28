@@ -78,6 +78,12 @@ const FAILURES = {
     text: 'Analisis memakan waktu terlalu lama. Coba lagi beberapa saat lagi.',
     retry: true,
   },
+  ai_sibuk: {
+    label: 'Tidak bisa dianalisis',
+    title: ['Layanan AI ', el('em', {}, 'sedang sibuk.')],
+    text: 'Layanan AI sedang sibuk melayani banyak permintaan. Coba lagi dalam beberapa menit.',
+    retry: true,
+  },
   layanan_gagal: {
     label: 'Tidak bisa dianalisis',
     title: ['Analisis ', el('em', {}, 'gagal.')],

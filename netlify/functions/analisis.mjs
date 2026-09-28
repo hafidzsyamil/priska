@@ -16,13 +16,12 @@
  */
 
 import { extractArticle, splitSentences } from '../lib/ekstrak.mjs';
-import { judgeEvidence, labelArticle } from '../lib/gemini.mjs';
+import { DEFAULT_MODELS, judgeEvidence, labelArticle } from '../lib/gemini.mjs';
 import { ApiError, createDeadline } from '../lib/http.mjs';
 import { computeScore } from '../lib/skor.mjs';
 import { searchFactChecks, searchNews } from '../lib/sumber.mjs';
 import { assertPublicUrl, normalizeArticleUrl } from '../lib/url.mjs';
 
-const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
 const MAX_SENTENCES = 120;
 const MAX_COMPARISONS_PER_CLAIM = 2;
 const MAX_COMPARISONS = 5;
@@ -66,7 +65,8 @@ function readKeys() {
     factcheck: env('FACTCHECK_API_KEY'),
     tavily: env('TAVILY_API_KEY'),
     jina: env('JINA_API_KEY'),
-    model: env('GEMINI_MODEL') || DEFAULT_MODEL,
+    // GEMINI_MODEL, if set, is tried first; the defaults remain as fallbacks.
+    models: [...new Set([env('GEMINI_MODEL'), ...DEFAULT_MODELS].filter(Boolean))],
   };
   if (!keys.gemini || !keys.factcheck || !keys.tavily) {
     throw new ApiError(503, 'belum_dikonfigurasi', 'Mesin analisis belum aktif.');
@@ -87,7 +87,7 @@ async function analyse(url, keys, deadline) {
 
   // 2. Label
   const labels = await labelArticle(article, sentences, {
-    apiKey: keys.gemini, model: keys.model, timeoutMs: deadline.timeout(25_000),
+    apiKey: keys.gemini, models: keys.models, timeoutMs: deadline.timeout(25_000),
   });
   const claims = labels.klaimUtama;
 
@@ -119,7 +119,7 @@ async function analyse(url, keys, deadline) {
     articles.map((item, position) => ({ ...item, id: `A${index + 1}-${position + 1}`, klaim: index + 1 })));
   const judged = factCandidates.length || articleCandidates.length
     ? await judgeEvidence(claims, factCandidates, articleCandidates, {
-      apiKey: keys.gemini, model: keys.model, timeoutMs: deadline.timeout(20_000),
+      apiKey: keys.gemini, models: keys.models, timeoutMs: deadline.timeout(20_000),
     })
     : { factcheck: new Map(), pembanding: new Map() };
 

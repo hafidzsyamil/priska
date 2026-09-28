@@ -12,6 +12,12 @@ import { ApiError, UpstreamError, fetchJson } from './http.mjs';
 
 const ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models';
 
+/*
+ * Tried in order. gemini-3.1-flash-lite answered reliably on the free tier when tested
+ * (28 Sep 2026); gemini-3.5-flash-lite kept returning 503 then, so it is the fallback.
+ */
+export const DEFAULT_MODELS = ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite'];
+
 const SYSTEM = [
   'Kamu membantu memeriksa kredibilitas artikel berita berbahasa Indonesia.',
   'Tugasmu hanya memberi label dan mengekstrak informasi sesuai instruksi, bukan menilai benar atau salahnya berita.',
@@ -83,7 +89,7 @@ const EVIDENCE_SCHEMA = {
   required: ['factcheck', 'pembanding'],
 };
 
-export async function labelArticle(article, sentences, { apiKey, model, timeoutMs }) {
+export async function labelArticle(article, sentences, { apiKey, models, timeoutMs }) {
   const prompt = [
     `Judul: ${article.judul}`,
     `Media: ${article.sumber}`,
@@ -107,7 +113,7 @@ export async function labelArticle(article, sentences, { apiKey, model, timeoutM
       + ' dokumen, atau data resmi. Jangan masukkan sumber samar seperti "sejumlah warga", "banyak pihak", atau "sebuah penelitian".',
   ].join('\n');
 
-  const result = await generateJson({ apiKey, model, prompt, schema: ARTICLE_SCHEMA, timeoutMs });
+  const result = await generateJson({ apiKey, models, prompt, schema: ARTICLE_SCHEMA, timeoutMs });
 
   const labels = new Map();
   for (const item of result.label ?? []) {
@@ -145,7 +151,7 @@ export async function labelArticle(article, sentences, { apiKey, model, timeoutM
  * factChecks: [{ id, klaim, klaimDiperiksa, penerbit, rating }]
  * articles:   [{ id, klaim, sumber, judul, cuplikan }]
  */
-export async function judgeEvidence(claims, factChecks, articles, { apiKey, model, timeoutMs }) {
+export async function judgeEvidence(claims, factChecks, articles, { apiKey, models, timeoutMs }) {
   const prompt = [
     'Klaim utama dari artikel yang diperiksa:',
     ...claims.map((claim, index) => `${index + 1}. ${claim.klaim}`),
@@ -169,32 +175,76 @@ export async function judgeEvidence(claims, factChecks, articles, { apiKey, mode
     'Nilai hanya berdasarkan teks yang diberikan di atas.',
   ].join('\n');
 
-  const result = await generateJson({ apiKey, model, prompt, schema: EVIDENCE_SCHEMA, timeoutMs });
+  const result = await generateJson({ apiKey, models, prompt, schema: EVIDENCE_SCHEMA, timeoutMs });
   return {
     factcheck: new Map((result.factcheck ?? []).map((item) => [item.id, item])),
     pembanding: new Map((result.pembanding ?? []).map((item) => [item.id, item])),
   };
 }
 
-async function generateJson({ apiKey, model, prompt, schema, timeoutMs }) {
-  let data;
-  try {
-    data = await fetchJson('Gemini', `${ENDPOINT}/${encodeURIComponent(model)}:generateContent`, {
-      method: 'POST',
-      timeoutMs,
-      headers: { 'content-type': 'application/json', 'x-goog-api-key': apiKey },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM }] },
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: 'application/json', responseSchema: schema },
-      }),
-    });
-  } catch (error) {
-    if (error.status === 429) {
-      throw new ApiError(429, 'kuota_habis', 'Kuota analisis hari ini sudah habis. Coba lagi besok, atau lihat contoh hasil.');
+const MAX_ATTEMPTS = 8;
+const ROUND_PAUSE_MS = 1500;
+
+/*
+ * The free tier is often overloaded (503 "high demand"), usually for seconds at a
+ * time, and quotas are per model. So: try the models in turn, in rounds with a short
+ * pause between rounds, until one answers or the time budget runs out. A model that
+ * answered 404 (not available to this key) or 429 (its quota is used up) is dropped;
+ * overloads, server errors and timeouts are retried. Each attempt gets at most 60% of
+ * the remaining time, so one hang still leaves room for another try.
+ */
+async function generateJson({ apiKey, models, prompt, schema, timeoutMs }) {
+  const endsAt = Date.now() + timeoutMs;
+  const available = [...models];
+  const errors = [];
+  let index = 0;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS && available.length; attempt += 1) {
+    if (index >= available.length) {
+      index = 0;
+      await sleep(Math.min(ROUND_PAUSE_MS, Math.max(0, endsAt - Date.now() - 2000)));
     }
-    throw error;
+    const remaining = endsAt - Date.now();
+    if (remaining < 2000) break;
+    const model = available[index];
+    try {
+      return await callModel({ apiKey, model, prompt, schema, timeoutMs: Math.round(remaining * 0.6) });
+    } catch (error) {
+      if (!(error instanceof UpstreamError) || !isRetryable(error.status)) throw error;
+      console.warn(`Gemini ${model} gagal (${error.message}); mencoba lagi.`);
+      errors.push(error);
+      if (error.status === 404 || error.status === 429) available.splice(index, 1);
+      else index += 1;
+    }
   }
+  if (errors.length && errors.every((error) => error.status === 429)) {
+    throw new ApiError(429, 'kuota_habis', 'Kuota analisis hari ini sudah habis. Coba lagi besok, atau lihat contoh hasil.');
+  }
+  if (errors.some((error) => error.status === 503)) {
+    throw new ApiError(502, 'ai_sibuk', 'Layanan AI sedang sibuk melayani banyak permintaan. Coba lagi dalam beberapa menit.');
+  }
+  throw errors.at(-1) ?? new UpstreamError('Gemini', 0, 'waktu habis');
+}
+
+/* 0 = timeout, network error, empty or invalid JSON output. */
+function isRetryable(status) {
+  return status === 0 || status === 404 || status === 429 || status >= 500;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function callModel({ apiKey, model, prompt, schema, timeoutMs }) {
+  const data = await fetchJson('Gemini', `${ENDPOINT}/${encodeURIComponent(model)}:generateContent`, {
+    method: 'POST',
+    timeoutMs,
+    headers: { 'content-type': 'application/json', 'x-goog-api-key': apiKey },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: SYSTEM }] },
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: { responseMimeType: 'application/json', responseSchema: schema },
+    }),
+  });
 
   const candidate = data.candidates?.[0];
   const text = (candidate?.content?.parts ?? []).filter((part) => !part.thought).map((part) => part.text ?? '').join('');
