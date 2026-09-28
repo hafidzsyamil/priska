@@ -86,6 +86,29 @@ Paket Free berbasis kredit (akun dibuat setelah 4 September 2025): 300 kredit pe
 
 Deploy adalah pemakaian terbesar. `netlify.toml` punya aturan `ignore` supaya commit yang tidak menyentuh `public/`, `netlify/`, atau `netlify.toml` tidak di-deploy.
 
+## Implementasi
+
+| Bagian | File |
+|---|---|
+| Endpoint dan alur | `netlify/functions/analisis.mjs` |
+| Ekstraksi artikel (Jina, cadangan HTML) | `netlify/lib/ekstrak.mjs` |
+| Prompt dan skema Gemini | `netlify/lib/gemini.mjs` |
+| Fact Check dan Tavily | `netlify/lib/sumber.mjs` |
+| Aturan skor | `netlify/lib/skor.mjs` |
+| Validasi link (hanya http/https publik) | `netlify/lib/url.mjs` |
+| Tes (API diganti stub) | `tests/*.test.mjs`, jalankan `node --test tests/*.test.mjs` |
+
+- **Model:** `gemini-3.5-flash-lite`, bisa diganti lewat environment variable `GEMINI_MODEL`.
+- **Batas waktu:** seluruh analisis dibatasi 55 detik. Jika habis, pengguna mendapat pesan "Waktu habis".
+- **Batas request:** 6 request per menit per IP untuk `/api/analisis` (aturan rate limit Netlify di `config` function).
+- **Layanan yang gagal:** analisis tetap jalan. Komponen yang terdampak diberi nilai netral, dan hasilnya memuat catatan yang menjelaskan hal itu.
+- **Keamanan:** link ke alamat lokal atau privat ditolak; teks dari artikel dan hasil pencarian diperlakukan sebagai data, bukan instruksi, di prompt; di browser, teks dimasukkan dengan `textContent` dan hanya link `http(s)` yang dijadikan tautan.
+
+## Risiko yang perlu dicatat
+
+- **Larangan pengambilan otomatis:** beberapa media menulis larangan eksplisit. Contohnya, ANTARA mencantumkan "Dilarang keras mengambil konten, melakukan crawling atau pengindeksan otomatis untuk AI di situs web ini tanpa izin tertulis dari Kantor Berita ANTARA." Aplikasi ini hanya membaca satu halaman atas permintaan pengguna dan tidak menyimpan isi artikel selain di cache hasil, tapi hal ini perlu dibahas di bagian etika laporan. Jika perlu, tambahkan daftar domain yang tidak diproses.
+- **Kualitas label:** label klaim/opini dan sikap artikel pembanding berasal dari model bahasa dan bisa keliru. Evaluasi dengan sampel artikel berlabel manual sebelum demo.
+
 ## Sumber
 
 - [Netlify: How credits work](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/how-credits-work/)

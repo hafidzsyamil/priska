@@ -9,31 +9,31 @@
     "tanggal": null
   },
   "durasi_detik": 26.3,
-  "ringkasan": "Dua klaim utamanya sudah dinilai salah dan menyesatkan oleh pemeriksa fakta, dan artikel tidak menyebut sumber yang bisa dicek.",
+  "ringkasan": "Dua klaim utamanya sudah dinilai keliru atau menyesatkan oleh pemeriksa fakta. Penulis atau sumber informasinya kurang jelas.",
   "komponen": [
     {
       "nama": "Dukungan sumber lain",
-      "nilai": 4,
+      "nilai": 12,
       "maks": 35,
-      "alasan": "Dari 4 artikel pembanding, 2 membantah dan 1 netral. Satu-satunya yang mendukung hanya berisi testimoni tanpa data medis."
+      "alasan": "4 artikel dari 4 media lain membahas klaim utama: 1 mendukung, 2 membantah, 1 netral."
     },
     {
       "nama": "Fact-check yang ada",
-      "nilai": 2,
+      "nilai": 7,
       "maks": 25,
-      "alasan": "Dua klaim utama sudah diperiksa pemeriksa fakta dan dinilai Salah serta Menyesatkan."
+      "alasan": "Klaim 01 sudah diperiksa Cek Fakta Contoh dengan rating \"Salah\". Klaim 02 sudah diperiksa Cek Fakta Contoh dengan rating \"Menyesatkan\". Klaim lain belum pernah diperiksa, jadi diberi nilai netral."
     },
     {
       "nama": "Porsi klaim faktual",
-      "nilai": 5,
+      "nilai": 6,
       "maks": 15,
-      "alasan": "Hanya 5 dari 12 kalimat berupa klaim yang bisa diperiksa. Sisanya ajakan, testimoni, dan opini."
+      "alasan": "5 dari 12 kalimat berisi klaim yang bisa diperiksa. 7 kalimat lain berupa opini, penilaian, atau ajakan."
     },
     {
       "nama": "Transparansi sumber",
-      "nilai": 3,
+      "nilai": 0,
       "maks": 25,
-      "alasan": "Tidak ada nama penulis maupun tanggal terbit. Penelitian yang dirujuk tidak disebut judul, peneliti, atau jurnalnya."
+      "alasan": "Nama penulis tidak dicantumkan. Tanggal terbit tidak dicantumkan. Tidak ada narasumber atau data yang disebut dengan jelas."
     }
   ],
   "klaim_utama": [
@@ -101,17 +101,53 @@
     }
   ],
   "kalimat": [
-    { "jenis": "klaim", "teks": "Rebusan daun sirsak dapat menyembuhkan diabetes secara total hanya dalam 7 hari." },
-    { "jenis": "opini", "teks": "Ini adalah rahasia yang tidak ingin diketahui perusahaan farmasi." },
-    { "jenis": "klaim", "teks": "Sebuah penelitian universitas di Jepang membuktikan daun sirsak lebih ampuh daripada insulin." },
-    { "jenis": "opini", "teks": "Sudah banyak orang yang merasakan sendiri khasiatnya." },
-    { "jenis": "klaim", "teks": "Cukup rebus 10 lembar daun sirsak dengan tiga gelas air hingga tersisa satu gelas." },
-    { "jenis": "klaim", "teks": "Minum rebusan tersebut setiap pagi sebelum sarapan." },
-    { "jenis": "opini", "teks": "Rasanya memang pahit, tetapi hasilnya luar biasa." },
-    { "jenis": "klaim", "teks": "Setelah rutin minum rebusan ini, pasien diabetes boleh menghentikan obat dari dokter." },
-    { "jenis": "opini", "teks": "Jangan sampai terlambat seperti banyak orang lainnya." },
-    { "jenis": "opini", "teks": "Alam sudah menyediakan obat untuk segala penyakit." },
-    { "jenis": "opini", "teks": "Bagikan informasi ini kepada keluarga dan teman yang Anda sayangi." },
-    { "jenis": "opini", "teks": "Dijamin Anda tidak akan menyesal mencobanya." }
+    {
+      "jenis": "klaim",
+      "teks": "Rebusan daun sirsak dapat menyembuhkan diabetes secara total hanya dalam 7 hari."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Ini adalah rahasia yang tidak ingin diketahui perusahaan farmasi."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Sebuah penelitian universitas di Jepang membuktikan daun sirsak lebih ampuh daripada insulin."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Sudah banyak orang yang merasakan sendiri khasiatnya."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Cukup rebus 10 lembar daun sirsak dengan tiga gelas air hingga tersisa satu gelas."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Minum rebusan tersebut setiap pagi sebelum sarapan."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Rasanya memang pahit, tetapi hasilnya luar biasa."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Setelah rutin minum rebusan ini, pasien diabetes boleh menghentikan obat dari dokter."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Jangan sampai terlambat seperti banyak orang lainnya."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Alam sudah menyediakan obat untuk segala penyakit."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Bagikan informasi ini kepada keluarga dan teman yang Anda sayangi."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Dijamin Anda tidak akan menyesal mencobanya."
+    }
   ]
 }

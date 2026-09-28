@@ -45,7 +45,7 @@
             <label class="label" for="url-artikel">Link artikel</label>
             <input class="field" id="url-artikel" name="url" type="url" inputmode="url" placeholder="https://…" required>
             <button class="btn" type="submit">Periksa artikel <span aria-hidden="true">→</span></button>
-            <p class="check-form__hint">Versi demo: mesin analisis belum aktif. Lihat <a class="link" href="#contoh">contoh hasil</a> untuk melihat tampilannya.</p>
+            <p class="check-form__hint">Analisis biasanya selesai dalam 15–30 detik. Ingin melihat tampilannya dulu? Buka <a class="link" href="#contoh">contoh hasil</a>.</p>
           </form>
         </div>
       </div>
@@ -130,29 +130,29 @@
           <div class="method__prose">
             <p class="lead dropcap">Skor dihitung dari empat komponen dengan bobot tetap. Setiap komponen punya nilai maksimal dan alasan tertulis, jadi kamu bisa melihat bagian mana yang menaikkan atau menurunkan skor.</p>
             <p>Skor tidak bergantung pada nama besar media. Artikel dari media mana pun dinilai dengan cara yang sama: apakah klaimnya didukung sumber lain, apakah sudah pernah diperiksa pemeriksa fakta, seberapa banyak isinya berupa fakta, dan seberapa jelas sumbernya disebut.</p>
-            <p class="muted">Jika belum ada fact-check untuk sebuah klaim, komponen fact-check diberi nilai netral 15 dari 25, bukan nol.</p>
+            <p class="muted">Model bahasa hanya memberi label pada kalimat dan artikel. Angkanya dihitung dengan aturan tetap di samping, jadi setiap poin bisa ditelusuri.</p>
           </div>
           <div class="method__detail">
             <ol class="weights">
               <li class="weight">
                 <h3 class="weight__name">Dukungan sumber lain</h3>
                 <p class="weight__value">35</p>
-                <p class="weight__desc">Berapa banyak artikel dari media lain yang mendukung, membantah, atau netral terhadap tiga klaim utama.</p>
+                <p class="weight__desc">Untuk tiap klaim utama, artikel media lain yang mendukung dihitung penuh, yang netral setengah, yang membantah nol. Klaim yang tidak dibahas media lain mendapat seperempat.</p>
               </li>
               <li class="weight">
                 <h3 class="weight__name">Fact-check yang ada</h3>
                 <p class="weight__value">25</p>
-                <p class="weight__desc">Hasil pemeriksaan fakta yang sudah terbit untuk klaim yang sama.</p>
+                <p class="weight__desc">Rating pemeriksa fakta untuk klaim yang sama: benar penuh, sebagian benar setengah, menyesatkan seperlima, salah nol. Tanpa fact-check, atau rating yang tidak jelas: 15 dari 25.</p>
               </li>
               <li class="weight">
                 <h3 class="weight__name">Porsi klaim faktual</h3>
                 <p class="weight__value">15</p>
-                <p class="weight__desc">Perbandingan kalimat berisi klaim yang bisa diperiksa dengan kalimat opini.</p>
+                <p class="weight__desc">Persentase kalimat yang berisi klaim bisa diperiksa, dikali 15.</p>
               </li>
               <li class="weight">
                 <h3 class="weight__name">Transparansi sumber</h3>
                 <p class="weight__value">25</p>
-                <p class="weight__desc">Nama penulis, tanggal terbit, serta narasumber atau data yang disebut dengan jelas.</p>
+                <p class="weight__desc">Nama penulis 7 poin (hanya redaksi atau tim: 3), tanggal terbit 6 poin, dan 4 poin untuk setiap narasumber atau data yang disebut jelas, paling banyak 12.</p>
               </li>
               <li class="weight weight--total">
                 <p class="weight__name">Total</p>
@@ -181,7 +181,7 @@
         <ul class="examples">
           <li>
             <a class="card card--interactive example" href="/hasil.html?contoh=halte-listrik">
-              <span class="example__score">81</span>
+              <span class="example__score">84</span>
               <span class="label">Indikator tinggi</span>
               <span class="example__title">Pemkot Sukamaju Resmikan 12 Halte Bus Listrik di Koridor Timur</span>
               <span class="label example__source">kabarsukamaju.example</span>
@@ -190,7 +190,7 @@
           </li>
           <li>
             <a class="card card--interactive example" href="/hasil.html?contoh=harga-cabai">
-              <span class="example__score">52</span>
+              <span class="example__score">57</span>
               <span class="label">Indikator sedang</span>
               <span class="example__title">Harga Cabai Rawit di Sukamaju Melonjak 40 Persen, Pedagang Salahkan Cuaca</span>
               <span class="label example__source">pasarhariini.example</span>
@@ -199,7 +199,7 @@
           </li>
           <li>
             <a class="card card--interactive example" href="/hasil.html?contoh=daun-sirsak">
-              <span class="example__score">14</span>
+              <span class="example__score">25</span>
               <span class="label">Indikator rendah</span>
               <span class="example__title">Cukup Minum Rebusan Daun Sirsak Tiap Pagi, Diabetes Sembuh Total dalam 7 Hari</span>
               <span class="label example__source">infosehatkita.example</span>

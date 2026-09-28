@@ -41,6 +41,20 @@
   overflow-wrap: anywhere;
 }
 
+/* Notes about a partial analysis (e.g. a search service was down). */
+.notes {
+  max-width: 48rem;
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  border: var(--line-thin);
+}
+
+.notes__list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+  font-size: var(--text-base);
+}
+
 /* Links that point at fictional demo URLs are shown as plain text. */
 .demo-link {
   text-decoration: underline dotted;
@@ -453,8 +467,19 @@
   overflow-wrap: anywhere;
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.demo-list__heading {
+  margin-top: 4rem;
+}
+
 .demo-list {
-  margin-top: 3rem;
+  margin-top: 1rem;
   border-top: var(--line-medium);
 }
 
@@ -485,4 +510,45 @@
 
 .demo-list .label {
   color: var(--text-muted);
+}
+
+/* Analysis in progress */
+
+.progress-steps {
+  display: grid;
+  gap: 1px;
+  margin-top: 3rem;
+  border: var(--line-thin);
+  background: var(--color-fg);
+}
+
+.progress-step {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: var(--color-bg);
+}
+
+.progress-step__name {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.progress-step__text {
+  font-size: var(--text-base);
+  color: var(--text-muted);
+}
+
+.progress-note {
+  margin-top: 2rem;
+  color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+  .progress-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }

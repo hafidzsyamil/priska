@@ -9,31 +9,31 @@
     "tanggal": "2026-09-24"
   },
   "durasi_detik": 22.1,
-  "ringkasan": "Sebagian klaim didukung media lain, tetapi angka utamanya dibantah data resmi dan sumber angkanya tidak disebut.",
+  "ringkasan": "Ada klaim utama yang dibantah oleh liputan media lain.",
   "komponen": [
     {
       "nama": "Dukungan sumber lain",
-      "nilai": 17,
+      "nilai": 20,
       "maks": 35,
-      "alasan": "Klaim soal cuaca didukung. Angka kenaikan 40 persen didukung 1 artikel tetapi dibantah 1 artikel yang mengutip data Dinas Perdagangan. Rencana operasi pasar tidak ditemukan di media lain."
+      "alasan": "3 artikel dari 3 media lain membahas klaim utama: 2 mendukung, 1 membantah, 0 netral. 1 dari 3 klaim utama tidak ditemukan di media lain."
     },
     {
       "nama": "Fact-check yang ada",
       "nilai": 15,
       "maks": 25,
-      "alasan": "Belum ada fact-check untuk ketiga klaim utama, jadi komponen ini diberi nilai netral."
+      "alasan": "Belum ada fact-check untuk klaim utama artikel ini, jadi komponen ini diberi nilai netral."
     },
     {
       "nama": "Porsi klaim faktual",
-      "nilai": 8,
+      "nilai": 9,
       "maks": 15,
-      "alasan": "7 dari 12 kalimat berisi klaim yang bisa diperiksa. 5 kalimat lain berupa opini, dugaan, dan perkiraan."
+      "alasan": "7 dari 12 kalimat berisi klaim yang bisa diperiksa. 5 kalimat lain berupa opini, penilaian, atau ajakan."
     },
     {
       "nama": "Transparansi sumber",
-      "nilai": 12,
+      "nilai": 13,
       "maks": 25,
-      "alasan": "Tanggal terbit tercantum, tetapi penulis hanya ditulis \"Tim Redaksi\" dan angka 40 persen tidak menyebut sumber datanya."
+      "alasan": "Penulis hanya dicantumkan sebagai redaksi atau tim, bukan nama orang. Tanggal terbit tercantum. Narasumber atau data yang disebut: Pemkot Sukamaju."
     }
   ],
   "klaim_utama": [
@@ -80,17 +80,53 @@
     }
   ],
   "kalimat": [
-    { "jenis": "klaim", "teks": "Harga cabai rawit di Pasar Induk Sukamaju naik 40 persen dalam dua minggu terakhir." },
-    { "jenis": "klaim", "teks": "Pada awal September harga cabai rawit masih Rp56.000 per kilogram, kini mencapai Rp78.000." },
-    { "jenis": "opini", "teks": "Kenaikan ini jelas sangat memberatkan ibu rumah tangga." },
-    { "jenis": "klaim", "teks": "Sejumlah pedagang menyebut pasokan dari sentra produksi di lereng selatan berkurang hampir separuh." },
-    { "jenis": "klaim", "teks": "Curah hujan tinggi sepanjang September merusak tanaman cabai di sentra produksi tersebut." },
-    { "jenis": "opini", "teks": "Pemerintah seharusnya sudah mengantisipasi hal ini sejak jauh hari." },
-    { "jenis": "opini", "teks": "Banyak pihak menduga ada permainan tengkulak di balik lonjakan harga." },
-    { "jenis": "klaim", "teks": "Harga cabai merah keriting relatif stabil di kisaran Rp42.000 per kilogram." },
-    { "jenis": "klaim", "teks": "Pemkot Sukamaju akan menggelar operasi pasar mulai pekan depan." },
-    { "jenis": "opini", "teks": "Operasi pasar biasanya tidak banyak membantu." },
-    { "jenis": "klaim", "teks": "Operasi pasar direncanakan berlangsung di lima kecamatan." },
-    { "jenis": "opini", "teks": "Situasi ini diperkirakan akan terus memburuk hingga akhir tahun." }
+    {
+      "jenis": "klaim",
+      "teks": "Harga cabai rawit di Pasar Induk Sukamaju naik 40 persen dalam dua minggu terakhir."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Pada awal September harga cabai rawit masih Rp56.000 per kilogram, kini mencapai Rp78.000."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Kenaikan ini jelas sangat memberatkan ibu rumah tangga."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Sejumlah pedagang menyebut pasokan dari sentra produksi di lereng selatan berkurang hampir separuh."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Curah hujan tinggi sepanjang September merusak tanaman cabai di sentra produksi tersebut."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Pemerintah seharusnya sudah mengantisipasi hal ini sejak jauh hari."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Banyak pihak menduga ada permainan tengkulak di balik lonjakan harga."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Harga cabai merah keriting relatif stabil di kisaran Rp42.000 per kilogram."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Pemkot Sukamaju akan menggelar operasi pasar mulai pekan depan."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Operasi pasar biasanya tidak banyak membantu."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Operasi pasar direncanakan berlangsung di lima kecamatan."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Situasi ini diperkirakan akan terus memburuk hingga akhir tahun."
+    }
   ]
 }

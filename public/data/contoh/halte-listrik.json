@@ -9,31 +9,31 @@
     "tanggal": "2026-09-21"
   },
   "durasi_detik": 17.8,
-  "ringkasan": "Klaim utama artikel ini konsisten dengan liputan media lain dan sumbernya disebut dengan jelas.",
+  "ringkasan": "Klaim utama artikel ini konsisten dengan liputan media lain. Sumber informasinya disebut dengan jelas.",
   "komponen": [
     {
       "nama": "Dukungan sumber lain",
-      "nilai": 31,
+      "nilai": 32,
       "maks": 35,
-      "alasan": "Ketiga klaim utama muncul di 4 artikel dari 4 media lain: 3 mendukung, 1 netral, dan tidak ada yang membantah."
+      "alasan": "4 artikel dari 4 media lain membahas klaim utama: 3 mendukung, 0 membantah, 1 netral."
     },
     {
       "nama": "Fact-check yang ada",
       "nilai": 15,
       "maks": 25,
-      "alasan": "Belum ada fact-check untuk ketiga klaim utama, jadi komponen ini diberi nilai netral."
+      "alasan": "Belum ada fact-check untuk klaim utama artikel ini, jadi komponen ini diberi nilai netral."
     },
     {
       "nama": "Porsi klaim faktual",
       "nilai": 12,
       "maks": 15,
-      "alasan": "10 dari 13 kalimat berisi klaim yang bisa diperiksa. Opini hanya 3 kalimat dan tidak mengubah isi berita."
+      "alasan": "10 dari 13 kalimat berisi klaim yang bisa diperiksa. 3 kalimat lain berupa opini, penilaian, atau ajakan."
     },
     {
       "nama": "Transparansi sumber",
-      "nilai": 23,
+      "nilai": 25,
       "maks": 25,
-      "alasan": "Nama penulis dan tanggal terbit tercantum. Artikel mengutip Dinas Perhubungan dan menyebut sumber anggaran secara langsung."
+      "alasan": "Nama penulis tercantum (Rina Hartati). Tanggal terbit tercantum. Narasumber atau data yang disebut: Wali Kota Sukamaju, Dinas Perhubungan, dan APBD 2026."
     }
   ],
   "klaim_utama": [
@@ -89,18 +89,57 @@
     }
   ],
   "kalimat": [
-    { "jenis": "klaim", "teks": "Pemerintah Kota Sukamaju meresmikan 12 halte bus listrik di koridor timur pada Sabtu, 20 September 2026." },
-    { "jenis": "klaim", "teks": "Peresmian dilakukan oleh Wali Kota Sukamaju di Halte Terminal Cempaka." },
-    { "jenis": "klaim", "teks": "Menurut Dinas Perhubungan, pembangunan halte menelan anggaran Rp18,6 miliar dari APBD 2026." },
-    { "jenis": "klaim", "teks": "Setiap halte dilengkapi papan jadwal digital dan jalur landai untuk kursi roda." },
-    { "jenis": "opini", "teks": "Langkah ini menjadi bukti keseriusan pemkot dalam membenahi transportasi umum." },
-    { "jenis": "klaim", "teks": "Armada bus listrik di koridor timur bertambah dari 8 menjadi 20 unit." },
-    { "jenis": "klaim", "teks": "Bus beroperasi setiap hari pukul 05.00 hingga 22.00 dengan jeda 15 menit." },
-    { "jenis": "klaim", "teks": "Tarif perjalanan ditetapkan Rp4.000 untuk umum dan Rp2.000 untuk pelajar." },
-    { "jenis": "opini", "teks": "Tarif ini terbilang sangat terjangkau bagi warga." },
-    { "jenis": "klaim", "teks": "Dishub mencatat rata-rata 3.200 penumpang per hari selama masa uji coba pada Agustus." },
-    { "jenis": "klaim", "teks": "Koridor timur menghubungkan Terminal Cempaka dengan kawasan industri Sukamaju Timur sepanjang 14 kilometer." },
-    { "jenis": "klaim", "teks": "Pembangunan koridor barat dijadwalkan dimulai pada 2027." },
-    { "jenis": "opini", "teks": "Warga berharap koridor barat tidak kalah nyaman dari koridor timur." }
+    {
+      "jenis": "klaim",
+      "teks": "Pemerintah Kota Sukamaju meresmikan 12 halte bus listrik di koridor timur pada Sabtu, 20 September 2026."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Peresmian dilakukan oleh Wali Kota Sukamaju di Halte Terminal Cempaka."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Menurut Dinas Perhubungan, pembangunan halte menelan anggaran Rp18,6 miliar dari APBD 2026."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Setiap halte dilengkapi papan jadwal digital dan jalur landai untuk kursi roda."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Langkah ini menjadi bukti keseriusan pemkot dalam membenahi transportasi umum."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Armada bus listrik di koridor timur bertambah dari 8 menjadi 20 unit."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Bus beroperasi setiap hari pukul 05.00 hingga 22.00 dengan jeda 15 menit."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Tarif perjalanan ditetapkan Rp4.000 untuk umum dan Rp2.000 untuk pelajar."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Tarif ini terbilang sangat terjangkau bagi warga."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Dishub mencatat rata-rata 3.200 penumpang per hari selama masa uji coba pada Agustus."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Koridor timur menghubungkan Terminal Cempaka dengan kawasan industri Sukamaju Timur sepanjang 14 kilometer."
+    },
+    {
+      "jenis": "klaim",
+      "teks": "Pembangunan koridor barat dijadwalkan dimulai pada 2027."
+    },
+    {
+      "jenis": "opini",
+      "teks": "Warga berharap koridor barat tidak kalah nyaman dari koridor timur."
+    }
   ]
 }

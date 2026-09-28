@@ -1,18 +1,22 @@
 /*
  * Results page.
  *
- * Reads ?contoh=<id> (a demo result) or ?url=<link> (from the check form),
- * loads the matching result JSON and renders it. Until the analysis backend
- * exists, only the demo results in /data/contoh/ can be shown; any other link
- * gets an honest "not available yet" state.
+ * ?contoh=<id> shows a demo result from /data/contoh/. ?url=<link> (from the check
+ * form) shows the matching demo if there is one, otherwise asks /api/analisis
+ * (netlify/functions/analisis.mjs) to check the article. Both return the same JSON
+ * shape. Every failure gets its own honest message plus links to the demos.
  *
  * All text from the data is inserted with textContent, never as HTML, because
- * real results will contain text scraped from third-party articles.
+ * real results contain text scraped from third-party articles.
  */
 
 'use strict';
 
 const DATA_DIR = '/data/contoh/';
+
+/* Part of the API cache key. Bump when the result format or scoring rules change. */
+const API_VERSION = '1';
+const API_TIMEOUT_MS = 75_000;
 
 const BANDS = [
   { min: 70, label: 'Tinggi' },
@@ -24,6 +28,62 @@ const STANCES = {
   mendukung: 'Mendukung',
   membantah: 'Membantah',
   netral: 'Netral',
+};
+
+const COUNT_WORDS = ['Tidak ada', 'Satu', 'Dua', 'Tiga'];
+
+const STEPS = [
+  ['01', 'Ekstraksi', 'Mengambil judul, penulis, tanggal, dan isi artikel.'],
+  ['02', 'Pemisahan', 'Memberi label klaim atau opini pada setiap kalimat.'],
+  ['03', 'Pencocokan', 'Mencari fact-check dan artikel lain yang membahas klaim yang sama.'],
+  ['04', 'Penilaian', 'Menghitung skor beserta alasannya.'],
+];
+
+const FAILURES = {
+  tanpa_link: {
+    label: 'Belum ada link',
+    title: ['Tempel ', el('em', {}, 'link dulu.')],
+    text: 'Tempel link artikel berita di halaman depan untuk memulai, atau lihat contoh hasil berikut.',
+  },
+  belum_aktif: {
+    label: 'Versi demo',
+    title: ['Analisis ', el('em', {}, 'belum aktif.')],
+    text: 'Mesin analisis sedang disiapkan, jadi link baru belum bisa diperiksa. '
+      + 'Sementara itu, lihat contoh hasil untuk tiga artikel fiktif berikut.',
+  },
+  link_tidak_valid: {
+    label: 'Tidak bisa dianalisis',
+    title: ['Link ', el('em', {}, 'tidak valid.')],
+    text: 'Tempel alamat lengkap artikel berita, diawali https://.',
+  },
+  artikel_tidak_terbaca: {
+    label: 'Tidak bisa dianalisis',
+    title: ['Artikel ', el('em', {}, 'tidak terbaca.')],
+    text: 'Isi artikel tidak bisa dibaca dari link ini.',
+  },
+  kuota_habis: {
+    label: 'Tidak bisa dianalisis',
+    title: ['Kuota ', el('em', {}, 'habis.')],
+    text: 'Kuota analisis hari ini sudah habis. Coba lagi besok, atau lihat contoh hasil.',
+  },
+  terlalu_sering: {
+    label: 'Tidak bisa dianalisis',
+    title: ['Tunggu ', el('em', {}, 'sebentar.')],
+    text: 'Terlalu banyak permintaan dalam satu menit. Tunggu sebentar, lalu coba lagi.',
+    retry: true,
+  },
+  waktu_habis: {
+    label: 'Tidak bisa dianalisis',
+    title: ['Waktu ', el('em', {}, 'habis.')],
+    text: 'Analisis memakan waktu terlalu lama. Coba lagi beberapa saat lagi.',
+    retry: true,
+  },
+  layanan_gagal: {
+    label: 'Tidak bisa dianalisis',
+    title: ['Analisis ', el('em', {}, 'gagal.')],
+    text: 'Salah satu layanan analisis sedang bermasalah. Coba lagi beberapa saat lagi.',
+    retry: true,
+  },
 };
 
 const dateFormat = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -39,20 +99,82 @@ async function main() {
   const exampleId = params.get('contoh');
   const submittedUrl = params.get('url');
 
+  let examples;
   try {
-    const examples = await fetchJson(`${DATA_DIR}index.json`);
-    const match = exampleId
-      ? examples.find((item) => item.id === exampleId)
-      : examples.find((item) => sameArticle(item.url, submittedUrl));
-
-    if (match) {
-      renderResult(await fetchJson(`${DATA_DIR}${match.id}.json`));
-    } else {
-      renderUnavailable(submittedUrl, examples);
-    }
+    examples = await fetchJson(`${DATA_DIR}index.json`);
   } catch (error) {
     console.error(error);
     renderError();
+    return;
+  }
+
+  const match = exampleId
+    ? examples.find((item) => item.id === exampleId)
+    : examples.find((item) => sameArticle(item.url, submittedUrl));
+
+  if (match) {
+    try {
+      renderResult(await fetchJson(`${DATA_DIR}${match.id}.json`));
+    } catch (error) {
+      console.error(error);
+      renderError();
+    }
+  } else if (submittedUrl) {
+    await analyse(submittedUrl, examples);
+  } else {
+    renderFailure('tanpa_link', null, null, examples);
+  }
+}
+
+async function analyse(submittedUrl, examples) {
+  const url = normalizeArticleUrl(submittedUrl);
+  if (!url) {
+    renderFailure('link_tidak_valid', null, submittedUrl, examples);
+    return;
+  }
+
+  const stopProgress = renderProgress(url);
+  let response = null;
+  let body = null;
+  let timedOut = false;
+  try {
+    const query = new URLSearchParams({ url, v: API_VERSION });
+    response = await fetch(`/api/analisis?${query}`, { signal: AbortSignal.timeout(API_TIMEOUT_MS) });
+    body = await response.json().catch(() => null);
+  } catch (error) {
+    console.error(error);
+    timedOut = error.name === 'TimeoutError';
+  }
+  stopProgress();
+
+  if (response?.ok && Array.isArray(body?.komponen)) {
+    renderResult(body);
+    return;
+  }
+  renderFailure(failureCode(response, body, timedOut), body?.pesan, url, examples);
+}
+
+function failureCode(response, body, timedOut) {
+  if (!response) return timedOut ? 'waktu_habis' : 'layanan_gagal';
+  if (response.status === 404 || response.status === 503) return 'belum_aktif';
+  if (body?.galat in FAILURES) return body.galat;
+  if (response.status === 429) return 'terlalu_sering';
+  if (response.status === 504) return 'waktu_habis';
+  return 'layanan_gagal';
+}
+
+/* Same clean-up as the server: http(s) only, no fragment, no tracking parameters. */
+function normalizeArticleUrl(raw) {
+  try {
+    const url = new URL(raw.trim());
+    if (!['http:', 'https:'].includes(url.protocol)) return null;
+    url.hash = '';
+    for (const key of [...url.searchParams.keys()]) {
+      if (/^(utm_\w+|fbclid|gclid|dclid|msclkid|igshid|mc_cid|mc_eid)$/i.test(key)) url.searchParams.delete(key);
+    }
+    return url.href;
+  } catch {
+    return null;
   }
 }
 
@@ -113,8 +235,18 @@ function articleSection(data) {
       el('ul', { class: 'meta-list label' },
         metaItem(artikel.penulis, 'Penulis tidak dicantumkan'),
         metaItem(formatDate(artikel.tanggal), 'Tanggal tidak dicantumkan'),
-        el('li', {}, `Dianalisis dalam ${numberFormat.format(data.durasi_detik)} detik`)),
-      el('p', { class: 'article-head__url' }, sourceLink(artikel.url, artikel.url, data.demo))));
+        el('li', {}, analysedText(data))),
+      el('p', { class: 'article-head__url' }, sourceLink(artikel.url, artikel.url, data.demo)),
+      data.catatan?.length
+        ? el('div', { class: 'notes' },
+          el('p', { class: 'label' }, 'Catatan'),
+          el('ul', { class: 'notes__list' }, data.catatan.map((note) => el('li', {}, note))))
+        : null));
+}
+
+function analysedText(data) {
+  const duration = `dalam ${numberFormat.format(data.durasi_detik)} detik`;
+  return data.dianalisis ? `Dianalisis ${formatDate(data.dianalisis)} ${duration}` : `Dianalisis ${duration}`;
 }
 
 function metaItem(value, missingText) {
@@ -164,13 +296,15 @@ function componentRow(part) {
 }
 
 function claimsSection(data) {
+  const count = data.klaim_utama.length;
   return section(
     {
       id: 'klaim',
       label: '01 — Klaim utama',
-      title: ['Tiga klaim ', el('em', {}, 'yang diperiksa.')],
+      title: [`${COUNT_WORDS[count] ?? count} klaim `, el('em', {}, count ? 'yang diperiksa.' : 'untuk diperiksa.')],
+      intro: count ? null : 'Artikel ini tidak memuat klaim faktual yang bisa dicek silang ke media lain.',
     },
-    el('ol', { class: 'claims' }, data.klaim_utama.map((claim, index) => claimItem(claim, index + 1, data))),
+    count ? el('ol', { class: 'claims' }, data.klaim_utama.map((claim, index) => claimItem(claim, index + 1, data))) : null,
   );
 }
 
@@ -191,7 +325,7 @@ function factcheckBox(factcheck, demo) {
       el('p', {}, 'Belum ada hasil fact-check yang terbit untuk klaim ini.'));
   }
   return el('div', { class: 'factcheck inverted' },
-    el('p', { class: 'label muted' }, `Fact-check · ${factcheck.penerbit} · ${formatDate(factcheck.tanggal)}`),
+    el('p', { class: 'label muted' }, joinParts('Fact-check', factcheck.penerbit, formatDate(factcheck.tanggal))),
     el('p', { class: 'factcheck__rating' }, 'Rating: ', el('strong', {}, factcheck.rating)),
     el('p', {}, sourceLink(factcheck.url, factcheck.judul, demo)));
 }
@@ -211,9 +345,11 @@ function comparisonsSection(data) {
       id: 'pembanding',
       label: '02 — Artikel pembanding',
       title: ['Apa kata ', el('em', {}, 'media lain.')],
-      intro: `${data.pembanding.length} artikel dari ${sources} media yang membahas klaim yang sama.`,
+      intro: items.length
+        ? `${items.length} artikel dari ${sources} media yang membahas klaim yang sama.`
+        : 'Tidak ditemukan artikel dari media lain yang membahas klaim utama artikel ini.',
     },
-    el('ol', { class: 'comparisons' }, items.map((item) => comparisonItem(item, data.demo))),
+    items.length ? el('ol', { class: 'comparisons' }, items.map((item) => comparisonItem(item, data.demo))) : null,
   );
 }
 
@@ -223,7 +359,7 @@ function comparisonItem(item, demo) {
     el('div', { class: 'comparison__body' },
       el('h3', { class: 'comparison__title' }, sourceLink(item.url, item.judul, demo)),
       el('p', { class: 'label comparison__meta' },
-        `${item.sumber} · ${formatDate(item.tanggal)} · Klaim ${pad(item.klaim)}`),
+        joinParts(item.sumber, formatDate(item.tanggal), `Klaim ${pad(item.klaim)}`)),
       el('p', { class: 'comparison__note' }, item.catatan)));
 }
 
@@ -276,23 +412,49 @@ function closingSection() {
 
 /* ---------- Other states ---------- */
 
-function renderUnavailable(submittedUrl, examples) {
-  document.title = 'Analisis belum aktif — Cek Kredibilitas';
-  show(el('section', { class: 'section', 'aria-labelledby': 'belum-judul' },
+function renderProgress(url) {
+  document.title = 'Menganalisis… — Cek Kredibilitas';
+  const seconds = el('span', {}, '0');
+  show(el('section', { class: 'section', 'aria-labelledby': 'proses-judul' },
     el('div', { class: 'container' },
-      el('p', { class: 'label' }, 'Versi demo'),
-      el('h1', { id: 'belum-judul', class: 'display-title unavailable__title' }, 'Analisis ', el('em', {}, 'belum aktif.')),
-      el('p', { class: 'lead' },
-        'Mesin analisis sedang dibangun, jadi link baru belum bisa diperiksa. '
-        + 'Sementara itu, lihat contoh hasil untuk tiga artikel fiktif berikut.'),
-      submittedUrl
-        ? el('p', { class: 'unavailable__url' }, 'Link yang kamu kirim: ', submittedUrl)
-        : null,
+      el('p', { class: 'label' }, 'Sedang dianalisis · ', seconds, ' detik'),
+      el('h1', { id: 'proses-judul', class: 'display-title unavailable__title' }, 'Sedang ', el('em', {}, 'diperiksa.')),
+      el('p', { class: 'unavailable__url' }, url),
+      el('ol', { class: 'progress-steps' }, STEPS.map(([number, name, text]) => el('li', { class: 'progress-step' },
+        el('span', { class: 'label' }, number),
+        el('span', { class: 'progress-step__name' }, name),
+        el('span', { class: 'progress-step__text' }, text)))),
+      el('p', { class: 'progress-note' }, 'Biasanya selesai dalam 15–30 detik. Biarkan halaman ini tetap terbuka.'))));
+  statusLine.textContent = 'Artikel sedang dianalisis. Biasanya selesai dalam 15 sampai 30 detik.';
+
+  const started = Date.now();
+  const timer = setInterval(() => {
+    seconds.textContent = String(Math.floor((Date.now() - started) / 1000));
+  }, 1000);
+  return () => clearInterval(timer);
+}
+
+function renderFailure(code, serverMessage, url, examples) {
+  const failure = FAILURES[code] ?? FAILURES.layanan_gagal;
+  const text = code === 'belum_aktif' || !serverMessage ? failure.text : serverMessage;
+  const heading = failure.title.map((part) => (typeof part === 'string' ? part : part.textContent)).join('');
+  document.title = `${heading.replace(/\.$/, '')} — Cek Kredibilitas`;
+  show(el('section', { class: 'section', 'aria-labelledby': 'gagal-judul' },
+    el('div', { class: 'container' },
+      el('p', { class: 'label' }, failure.label),
+      el('h1', { id: 'gagal-judul', class: 'display-title unavailable__title' }, failure.title),
+      el('p', { class: 'lead' }, text),
+      url ? el('p', { class: 'unavailable__url' }, 'Link yang kamu kirim: ', url) : null,
+      el('div', { class: 'actions' },
+        failure.retry ? el('a', { class: 'btn', href: window.location.href }, 'Coba lagi') : null,
+        el('a', { class: failure.retry ? 'btn btn--outline' : 'btn', href: '/#periksa' },
+          'Periksa link lain ', el('span', { 'aria-hidden': 'true' }, '→'))),
+      el('p', { class: 'label demo-list__heading' }, 'Contoh hasil'),
       el('ul', { class: 'demo-list' }, examples.map((item) => el('li', {},
         el('a', { class: 'demo-list__link', href: `/hasil.html?contoh=${encodeURIComponent(item.id)}` },
           el('span', { class: 'demo-list__title' }, item.judul),
           el('span', { class: 'label' }, item.domain, ' ', el('span', { 'aria-hidden': 'true' }, '→')))))))));
-  statusLine.textContent = 'Analisis belum aktif untuk link ini.';
+  statusLine.textContent = text;
 }
 
 function renderError() {
@@ -326,17 +488,26 @@ function rule() {
   return el('hr', { class: 'rule' });
 }
 
-/* Evidence link. Demo data points at fictional .example URLs, so those render as text. */
+/*
+ * Evidence link. Demo data points at fictional .example URLs, so those render as text.
+ * Real links come from third-party APIs, so anything but http(s) is rendered as text too.
+ */
 function sourceLink(url, text, demo) {
   if (demo) {
     return el('span', { class: 'demo-link', title: 'Tautan fiktif (data contoh)' }, text);
   }
+  if (!/^https?:\/\//i.test(url ?? '')) return el('span', {}, text);
   return el('a', { class: 'link', href: url, target: '_blank', rel: 'noopener noreferrer' },
     text, el('span', { class: 'visually-hidden' }, ' (membuka tab baru)'));
 }
 
 function formatDate(iso) {
-  return iso ? dateFormat.format(new Date(`${iso}T00:00:00`)) : null;
+  const day = typeof iso === 'string' ? iso.slice(0, 10) : '';
+  return /^\d{4}-\d{2}-\d{2}$/.test(day) ? dateFormat.format(new Date(`${day}T00:00:00`)) : null;
+}
+
+function joinParts(...parts) {
+  return parts.filter(Boolean).join(' · ');
 }
 
 function pad(number) {
