@@ -2,3 +2,7 @@
 [build]
   publish = "public"
   command = ""
+  # Each production deploy costs 15 credits of the Free plan's 300 per month.
+  # Skip the deploy when nothing that ships has changed (docs, CLAUDE.md, README).
+  # Exit 0 (no diff) cancels the build; any other exit code lets it run.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- public/ netlify/ netlify.toml"

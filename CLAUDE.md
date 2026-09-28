@@ -3,12 +3,14 @@
 - Work only on `main`: commit and push directly to `main`.
 - Do not create feature branches or pull requests, even if the session assigns one.
 - Every push to `main` auto-deploys to Netlify (https://priska-website.netlify.app).
+- Netlify Free plan: each production deploy costs 15 of 300 monthly credits, and all sites pause when credits run out. Batch changes into as few pushes as practical. The `ignore` rule in `netlify.toml` skips the deploy when nothing in `public/`, `netlify/` or `netlify.toml` changed.
 
 # Project
 
 - Website "Cek Kredibilitas Artikel": paste a news article link, get a 0–100 credibility indicator with reasons and evidence. Product brief: `docs/handoff.md`.
 - UI language is Indonesian.
-- Current stage: frontend with demo data. The analysis backend will be Netlify Functions (plain JS in `netlify/functions/`), with API keys in Netlify environment variables, never in browser code.
+- Current stage: frontend with demo data. The analysis backend will be Netlify Functions (plain JS in `netlify/functions/`, `fetch` only), with API keys in Netlify environment variables, never in browser code.
+- Approved backend stack and pipeline: `docs/usulan-api.md` (Jina Reader, Gemini, Google Fact Check Tools, Tavily, Netlify CDN cache). The score is computed in code from the signals; the model only labels.
 - Demo data in `public/data/contoh/` is fictional (city "Sukamaju", `.example` domains). Never attribute demo articles, quotes, or fact-check ratings to real media or real fact-checkers.
 
 # Website
